@@ -2,490 +2,656 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Happy Birthday 🎂</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Happy Birthday Mithra ❤️</title>
+<link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
-
-body{
-  background:radial-gradient(circle at top,#3a005f,#000);
-  color:white;
-  overflow:hidden;
+/* --- RESET & BASICS --- */
+:root {
+  --primary: #ff8fa3;
+  --secondary: #c988ff;
+  --bg-dark: #120526;
+  --glass: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
 }
 
-/* COMMON */
-.screen{
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-}
-.hidden{display:none}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-button{
-  margin-top:25px;
-  padding:14px 30px;
-  border:none;
-  border-radius:30px;
-  background:linear-gradient(45deg,#ff7ad9,#9b5cff);
-  color:white;
-  font-size:18px;
-  box-shadow:0 0 20px #ff7ad9;
-}
-#welcome{
-  cursor:pointer;
+body {
+  min-height: 100vh;
+  background: radial-gradient(circle at center, #2b0f42, #120526);
+  color: #fff;
+  font-family: 'Nunito', sans-serif;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
 }
 
-/* HEARTS */
-.heart{
-  position:absolute;
-  color:#ff6fae;
-  animation:float 10s linear infinite;
-}
-@keyframes float{
-  0%{transform:translateY(100vh);opacity:0}
-  50%{opacity:1}
-  100%{transform:translateY(-10vh);opacity:0}
+/* --- BACKGROUND ANIMATION --- */
+#canvas-bg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -1;
 }
 
-/* CONFETTI */
-.confetti{
-  position:absolute;
-  font-size:20px;
-  animation:confettiFall 2s linear forwards;
-}
-@keyframes confettiFall{
-  0%{transform:translateY(0) rotate(0);opacity:1}
-  100%{transform:translateY(120vh) rotate(360deg);opacity:0}
-}
-
-/* COUNTDOWN */
-.count{
-  font-size:5rem;
-  animation:pulse 1s infinite;
-}
-@keyframes pulse{
-  50%{transform:scale(1.3)}
+/* --- SCREENS & TRANSITIONS --- */
+.screen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  padding: 20px;
 }
 
-.glow{
-  color:#ff7ad9;
-  text-shadow:0 0 15px #ff7ad9;
-  margin-top:15px;
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.8) translateY(50px);
 }
 
-/* CAKE */
-.cake{
-  position:relative;
-  width:230px;
-  height:210px;
+.active {
+  opacity: 1;
+  pointer-events: all;
+  transform: scale(1) translateY(0);
 }
 
-/* Move "Make a Wish" up */
-.screen h2{
-  margin-bottom: 35px;   /* space between text and cake */
-  margin-top: -30px;    /* moves text upward */
+/* --- GLASS CARD --- */
+.glass-card {
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  padding: 40px 30px;
+  border-radius: 30px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+  max-width: 400px;
+  width: 90%;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Cake layers */
-.layer{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  background:linear-gradient(#ffd1dc,#ff9eb5);
-  box-shadow:0 8px 0 #ff7fa2;
-  overflow:hidden;
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
+  transform: rotate(45deg);
+  pointer-events: none;
 }
 
-.layer.bottom{
-  width:210px;
-  height:75px;
-  bottom:30px;
-  border-radius:20px;
+/* --- TYPOGRAPHY --- */
+h1, h2 {
+  font-family: 'Sacramento', cursive;
+  font-size: 3rem;
+  background: linear-gradient(to right, #fff, #ffc3cf);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+  line-height: 1.2;
 }
 
-.layer.top{
-  width:165px;
-  height:60px;
-  bottom:95px;
-  border-radius:22px;
+p {
+  font-size: 1.1rem;
+  color: #e0e0e0;
+  line-height: 1.6;
 }
 
-/* Icing drip */
-.layer::before{
-  content:"";
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:18px;
-  background:#fff0f5;
-  border-radius:0 0 20px 20px;
+/* --- BUTTONS --- */
+.btn {
+  margin-top: 25px;
+  padding: 12px 40px;
+  border: none;
+  border-radius: 50px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 5px 20px rgba(255, 111, 174, 0.4);
+  transition: 0.3s;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Decorative dots */
-.layer::after{
-  content:"";
-  position:absolute;
-  bottom:15px;
-  left:15px;
-  width:100%;
-  height:10px;
-  background:
-    radial-gradient(circle,#ff6fae 4px,transparent 5px) 0 0/30px 10px;
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(255, 111, 174, 0.6);
 }
 
-.plate{
-  position:absolute;
-  bottom:0;
-  left:50%;
-  transform:translateX(-50%);
-  width:240px;
-  height:20px;
-  background:#e0e0e0;
-  border-radius:50%;
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: 0.5s;
+}
+
+.btn:hover::after {
+  left: 100%;
+}
+
+/* --- GIFT BOX ANIMATION --- */
+.gift-box-container {
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+.gift-box {
+  font-size: 80px;
+  animation: bounce 2s infinite;
+  display: inline-block;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+.shake {
+  animation: shake 0.5s infinite;
+}
+@keyframes shake {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  75% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* ===== CLEAN REALISTIC CAKE ===== */
+
+.cake-container {
+  position: relative;
+  width: 200px;
+  height: 220px;
+  margin: 20px auto;
+}
+
+/* Cake body */
+.cake-main {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  height: 110px;
+  background: linear-gradient(to bottom, #4b2a1a, #2e160b);
+  border-radius: 22px;
+  box-shadow:
+    inset 0 6px 0 rgba(255,255,255,0.05),
+    0 15px 25px rgba(0,0,0,0.45);
+}
+
+/* Cream top */
+.cake-icing {
+  position: absolute;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  height: 45px;
+  background: #f7eadc;
+  border-radius: 20px;
+  z-index: 2;
+}
+
+/* Cream drip (center only – clean look) */
+.cake-icing::after {
+  content: "";
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 30px;
+  background: #f7eadc;
+  border-radius: 0 0 18px 18px;
 }
 
 /* Candle */
-.candle{
-  position:absolute;
-  width:14px;
-  height:50px;
-  background:linear-gradient(#fff,#ffd1dc);
-  left:50%;
-  bottom:155px;
-  transform:translateX(-50%);
-  border-radius:7px;
+.candle {
+  position: absolute;
+  bottom: 125px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 45px;
+  background: linear-gradient(#fff, #ffd6dc);
+  border-radius: 6px;
+  z-index: 3;
 }
 
-.flame{
-  position:absolute;
-  width:18px;
-  height:25px;
-  top:-25px;
-  left:-2px;
-  background:radial-gradient(circle at 50% 30%,#fff,#ffb300,#ff6a00);
-  border-radius:50%;
-  display:none;
-  box-shadow:0 0 20px 8px rgba(255,170,0,0.8);
-  animation:flicker 0.9s infinite alternate;
+/* Flame */
+.flame {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 22px;
+  background: radial-gradient(
+    ellipse at bottom,
+    #fff3a0 0%,
+    #ffb300 60%,
+    #ff6a00 100%
+  );
+  border-radius: 50% 50% 40% 40%;
+  box-shadow: 0 0 15px rgba(255,180,60,0.9);
+  animation: flame-flicker 1s infinite;
+  cursor: pointer;
 }
 
-@keyframes flicker{
-  0%{transform:scale(1) rotate(-1deg)}
-  50%{transform:scale(1.1) rotate(1deg)}
-  100%{transform:scale(1) rotate(-1deg)}
+.flame.out {
+  opacity: 0;
+  transform: translateX(-50%) scale(0.6);
+  transition: 0.4s;
 }
 
-/* PHOTOS */
-.photo{
-  max-width:80%;
-  border-radius:18px;
-  box-shadow:0 0 25px pink;
+/* Flame animation */
+@keyframes flame-flicker {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.15); }
 }
 
-.photo-text{
-  margin-bottom:15px;
-  font-size:1.8rem;
+/* Soft shadow under cake */
+.cake-container::after {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 18px;
+  background: rgba(0,0,0,0.35);
+  filter: blur(12px);
+  border-radius: 50%;
 }
 
-/* FINAL PAGE FIX */
-#finalScreen{
-  background:radial-gradient(circle at top,#3a005f,#000);
+/* --- PHOTOS --- */
+.polaroid-container {
+  position: relative;
+  width: 280px;
+  height: 350px;
+  background: #fff;
+  padding: 15px 15px 50px 15px;
+  border-radius: 5px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  transform: rotate(-3deg);
+  transition: all 0.5s ease;
+}
+.polaroid-container img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 3px;
+  background: #eee;
+}
+.caption {
+  position: absolute;
+  bottom: 10px; left: 0; width: 100%;
+  text-align: center;
+  font-family: 'Sacramento', cursive;
+  font-size: 1.8rem;
+  color: #333;
+}
+/* Click effect for photos */
+.polaroid-container:active {
+  transform: scale(0.95) rotate(0deg);
 }
 
-/* Make a Wish + 19 years text positioning */
-#wishGroup{
-  margin-top: -35px;
+/* --- MUSIC CONTROL --- */
+.music-btn {
+  position: fixed;
+  top: 20px; right: 20px;
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(5px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  border: 1px solid rgba(255,255,255,0.3);
 }
 
-.screen h2{
-  margin-bottom: 5px;   /* brings subtitle closer */
+#count-num {
+  font-size: 6rem;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+/* Wish area */
+.wish-area{
+  margin-top:20px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+}
+
+
+/* Text styles */
+.wish-title{
+  font-size:1.2rem;
+  margin-top:4px;
 }
 
 .wish-sub{
-  margin-top: 0;
-  margin-bottom: 35px;  /* space before candle */
-  font-size: 1rem;
-  color: #ffb3ec;
-}
-
-/* Fade-in animation for birthday text */
-.fade-in-text{
-  opacity: 0;
-  animation: fadeInUp 2.5s ease forwards;
-}
-
-@keyframes fadeInUp{
-  from{
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to{
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Photo fade + zoom */
-.photo-animate{
-  opacity: 0;
-  transform: scale(0.95);
-  animation: photoFade 1.5s ease forwards;
-}
-
-@keyframes photoFade{
-  to{
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Photo text animation */
-.photo-text-animate{
-  opacity: 0;
-  transform: translateY(15px);
-  animation: textFade 1.8s ease forwards;
-}
-
-@keyframes textFade{
-  to{
-    opacity: 1;
-    transform: translateY(0);
-  }
+  font-size:0.95rem;
+  opacity:0.85;
 }
 
 </style>
 </head>
-
 <body>
 
-<audio id="bgMusic" loop>
-  <source src="music.mp3" type="audio/mpeg">
+<canvas id="canvas-bg"></canvas>
+<canvas id="canvas-confetti" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:99"></canvas>
+
+<div class="music-btn" onclick="toggleMusic()">🎵</div>
+<audio id="bgm" loop>
+  <source src="music.mp3" type="audio/mp3">
 </audio>
 
-<!-- Floating hearts -->
-<script>
-for(let i=0;i<15;i++){
-  let h=document.createElement("div");
-  h.className="heart";
-  h.innerHTML="💕";
-  h.style.left=Math.random()*100+"%";
-  h.style.animationDuration=(10+Math.random()*10)+"s";
-  document.body.appendChild(h);
-}
-</script>
-
-<!-- WELCOME -->
-<div id="welcome" class="screen">
-  <h1 class="glow">✨ Here we go… ✨</h1>
-<p class="glow">15th may — the day you were born ✨</p>
-  <p style="margin-top:20px;color:#ffb3ec">
-    Tap anywhere to begin
-  </p>
-</div>
-
-<!-- COUNTDOWN -->
-<div id="countdown" class="screen">
-  <div class="count" id="count">3</div>
-  <div class="glow">Crafting your special moment…</div>
-</div>
-
-<!-- GREETING -->
-<div id="greet" class="screen hidden">
-  <h1>🎉 A Cutiepie was born 21 years ago today 🎉</h1>
-  <p class="glow">Yes, it’s YOU!</p>
-  <button onclick="showCake()">🎁 Start the Surprise</button>
-</div>
-
-<!-- CAKE -->
-<div id="cakeScreen" class="screen hidden">
-  <div id="wishGroup">
-  <h2>🎂 Make a Wish</h2>
-  <p class="wish-sub">21 years of smiles, kindness, and magic 💫</p>
-</div>
-  <div class="cake">
-    <div class="candle">
-      <div class="flame" id="flame"></div>
-    </div>
-    <div class="layer top"></div>
-    <div class="layer bottom"></div>
-    <div class="plate"></div>
+<div id="screen-welcome" class="screen">
+  <div class="glass-card">
+    <div style="font-size: 50px; margin-bottom: 20px;">✨</div>
+    <h1>Hey Mithraa</h1>
+    <p>A magical day has arrived...</p>
+    <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 10px;">(Turn up your volume)</p>
+   <button class="btn" onclick="startCountdown()">
+  Start Journey
+</button>
   </div>
-  <button onclick="lightCandle()">🔥 Light the Candle</button>
 </div>
 
-<!-- MESSAGE -->
-<div id="message" class="screen hidden">
-  <h1 class="glow fade-in-text" style="animation-delay:0.5s">
-  Happy Birthday, MITHRA 🎉
-</h1>
- <p class="fade-in-text" style="max-width:85%;margin-top:20px;line-height:1.6" animation-delay: 0s;>
-   My girl,<br><br>
-Your smile and your eyes make my heart feel calm and happy.
- It’s the day you came into this world. In a short time, you’ve become one of my closest friends, and I truly cherish that. You’re so lovable, caring, and friendly, and being around you always feels easy and warm.
-Mithra, your smile has a calmness, your words have kindness, and your presence makes moments better. I’m really thankful for you and the bond we share.
-Wishing you a beautiful 21st year filled with happiness, peace, laughter, and everything your heart quietly hopes for. Stay the same sweet soul always 🌷✨
-  </p>
-  <button onclick="showPhotos()">📸 See Memories</button>
+<div id="screen-countdown" class="screen hidden">
+  <div class="glass-card">
+    <h1 id="count-num">3</h1>
+    <p>Get ready… ✨</p>
+  </div>
 </div>
 
-<!-- PHOTOS -->
-<div id="photos" class="screen hidden" onclick="nextPhoto()">
-  <h2 id="photoText" class="photo-text glow photo-text-animate">my girl 🌝</h2>
-  <img id="img" class="photo photo-animate" src="photos/photo1.jpg">
-  <div class="tap">Tap anywhere for next photo</div>
+<div id="screen-gift" class="screen hidden">
+  <div class="glass-card">
+    <h2>A Surprise!</h2>
+    <p>I found something precious for you.</p>
+    <br>
+    <div class="gift-box-container" onclick="openGift()">
+      <div class="gift-box" id="giftbox">🎁</div>
+    </div>
+    <p style="font-size: 0.9rem; opacity: 0.7;">Tap to open</p>
+  </div>
 </div>
 
-<!-- FINAL PAGE -->
-<div id="finalScreen" class="screen hidden">
-  <h1 class="glow">Thank You ❤️</h1>
-  <p style="max-width:85%;margin-top:20px;line-height:1.6">
-    Thank you for watching this little surprise till the end.
-    I hope this brought a smile to your face and warmth to your heart.
-    You mean a lot to me, always. 🌸✨
-  </p>
-  <button onclick="restart()">🔁 Restart Surprise</button>
+<div id="screen-cake" class="screen hidden">
+  <div class="glass-card">
+    <h2>Happy 21th B'day my Mithra💕</h2>
+   <div class="cake-container">
+  <div class="cake-icing"></div>
+  <div class="cake-main"></div>
+
+  <div class="candle">
+    <div class="flame" id="flame" onclick="blowCandle()"></div>
+  </div>
+</div>
+    <div id="wish-text" class="wish-area">
+  
+ 
+  <p class="wish-title">Make a wish</p>
+  <p class="wish-sub"><strong>Tap the flame</strong> to blow it out!</p>
+
+</div>
+  </div>
+</div>
+
+<div id="screen-letter" class="screen hidden">
+  <div class="glass-card">
+    <h1 style="font-size:2.5rem">My Dearest Mithraa</h1>
+    <div id="typewriter" style="min-height: 120px; text-align: left; margin: 20px 0; font-style: italic;"></div>
+    <button class="btn" onclick="goTo('screen-gallery')">See Memories 📸</button>
+  </div>
+</div>
+
+<div id="screen-gallery" class="screen hidden">
+  <div class="polaroid-container" onclick="nextPhoto()">
+    <img id="photo-img" src="photo1.jpg" alt="Memory">
+    <div class="caption" id="photo-caption">Mithraa 🌝</div>
+  </div>
+  <p style="margin-top: 30px; opacity: 0.7;">Tap the photo for next</p>
+</div>
+
+<div id="screen-end" class="screen hidden">
+  <div class="glass-card">
+    <h1>Thank you ❤️</h1>
+    <p>Thank you for watching this little surprise till the end.
+    I hope this brought a smile to your face and warmth to your heart.🌸✨</p>
+    <button class="btn" onclick="location.reload()">Replay</button>
+  </div>
 </div>
 
 <script>
-const countdown=document.getElementById("countdown");
-const greet=document.getElementById("greet");
-const cakeScreen=document.getElementById("cakeScreen");
-const message=document.getElementById("message");
-const photos=document.getElementById("photos");
-const finalScreen=document.getElementById("finalScreen");
-const flame=document.getElementById("flame");
-const img=document.getElementById("img");
-const photoText=document.getElementById("photoText");
-
-let c = 3;
-let counter;
-
-function runCountdown(){
-  document.getElementById("count").innerText = c;
-  c--;
-  if(c < 0){
-    clearInterval(counter);
-    countdown.classList.add("hidden");
-    greet.classList.remove("hidden");
-  }
-}
-
-const welcome = document.getElementById("welcome");
-
-welcome.addEventListener("click", () => {
-  const music = document.getElementById("bgMusic");
-  music.volume = 0.6;   // 🔉 adjust volume (0.1 – 1)
-  music.play().catch(()=>{});
-
-  welcome.classList.add("hidden");
-  countdown.classList.remove("hidden");
-
-  c = 3;
-  document.getElementById("count").innerText = "3";
-  counter = setInterval(runCountdown, 1000);
-});
-
-function showCake(){
-  greet.classList.add("hidden");
-  cakeScreen.classList.remove("hidden");
-}
-
-function lightCandle(){
-  flame.style.display="block";
-  confettiBurst();
-  setTimeout(()=>{
-    cakeScreen.classList.add("hidden");
-    message.classList.remove("hidden");
-  },1800);
-}
-
-const photoTexts=[
-  "my girl🌝",
-  "cutie🌹",
-  "sweetie 🫂",
-  "many many happy returs of the day❤️"
+/* --- CONFIGURATION --- */
+const photos = [
+  { src: "photo1.jpg", text: "Mithraa 🌝" },
+  { src: "photo2.jpg", text: "My girl💜" },
+  { src: "photo3.jpg", text: "my dear 🫂" },
+  { src: "photo4.jpg", text: "Happy Birthday my Angel ❤️" }
 ];
 
-let i=0;
+const letterText = "Happy Birthday, Mithra 🌸 You are a  kind, caring, and lovable person, and it shows in the way you treat everyone around you. Your friendly nature, calm smile, and positive presence make moments lighter and  more comfortable 😊✨ It’s truly nice to see someone who spreads warmth so naturally. Wishing you a year filled with happiness, peace, good health, and many beautiful moments 🎂🤍 May you keep shining just the way you are.";
 
-function showPhotos(){
-  message.classList.add("hidden");
-  photos.classList.remove("hidden");
-  i=0;
-  img.src="photo1.jpg";
-  photoText.innerText=photoTexts[0];
+/* --- AUDIO --- */
+const audio = document.getElementById('bgm');
+let isPlaying = false;
+
+function toggleMusic() {
+  if (isPlaying) { audio.pause(); } else { audio.play(); }
+  isPlaying = !isPlaying;
 }
 
-function nextPhoto(){
-  i++;
+/* --- NAVIGATION --- */
+function goTo(screenId) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.classList.add('hidden');
+  });
+  
+  const target = document.getElementById(screenId);
+  target.classList.remove('hidden');
+  target.classList.add('active');
 
-  // if all photos are done → go to final page
-  if(i >= photoTexts.length){
-    photos.classList.add("hidden");
-    finalScreen.classList.remove("hidden");
+  // Trigger specific actions based on screen
+  if(screenId === 'screen-gift') {
+    if(!isPlaying) { audio.play(); isPlaying = true; }
+  }
+  if(screenId === 'screen-letter') {
+    typeWriterEffect();
+  }
+}
+
+/* --- GIFT LOGIC --- */
+function openGift() {
+  const box = document.getElementById('giftbox');
+  box.classList.add('shake');
+  setTimeout(() => {
+    fireConfetti();
+    goTo('screen-cake');
+  }, 1500);
+}
+
+/* --- CAKE LOGIC --- */
+function blowCandle() {
+  const flame = document.getElementById('flame');
+  const wishText = document.getElementById('wish-text');
+  
+  flame.classList.add('out');
+  fireConfetti();
+  
+  wishText.innerHTML = "✨ Wish Granted! ✨";
+  
+  setTimeout(() => {
+    goTo('screen-letter');
+  }, 3000);
+}
+
+/* --- TYPEWRITER --- */
+function typeWriterEffect() {
+  const el = document.getElementById('typewriter');
+  el.innerHTML = "";
+  let i = 0;
+  const speed = 50; 
+  
+  function type() {
+    if (i < letterText.length) {
+      el.innerHTML += letterText.charAt(i);
+      i++;
+      setTimeout(type, speed);
+    }
+  }
+  type();
+}
+
+/* --- GALLERY LOGIC --- */
+let photoIndex = 0;
+function nextPhoto() {
+  photoIndex++;
+  if (photoIndex >= photos.length) {
+    goTo('screen-end');
     return;
   }
-
-  // reset animation
-  img.classList.remove("photo-animate");
-  photoText.classList.remove("photo-text-animate");
-  void img.offsetWidth;
-
-  img.src = "photo" + (i + 1) + ".jpg";
-  photoText.innerText = photoTexts[i];
-
-  img.classList.add("photo-animate");
-  photoText.classList.add("photo-text-animate");
+  
+  const img = document.getElementById('photo-img');
+  const cap = document.getElementById('photo-caption');
+  
+  // Fade out effect manually or just swap (simple swap for responsiveness)
+  img.style.opacity = 0;
+  setTimeout(() => {
+    img.src = photos[photoIndex].src;
+    cap.innerText = photos[photoIndex].text;
+    img.style.opacity = 1;
+    
+    // Random rotation for fun
+    const rot = Math.random() * 6 - 3; 
+    document.querySelector('.polaroid-container').style.transform = `rotate(${rot}deg)`;
+  }, 300);
 }
 
-function confettiBurst(){
-  const emojis = ["🎉","🎊","✨","💖","💫","❤️"];
+/* --- CONFETTI ENGINE (Simple Vanilla JS) --- */
+const canvasC = document.getElementById('canvas-confetti');
+const ctxC = canvasC.getContext('2d');
+canvasC.width = window.innerWidth;
+canvasC.height = window.innerHeight;
+
+let particles = [];
+
+function fireConfetti() {
+  for(let i=0; i<100; i++) {
+    particles.push({
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+      vx: (Math.random() - 0.5) * 20,
+      vy: (Math.random() - 0.5) * 20,
+      color: `hsl(${Math.random()*360}, 100%, 70%)`,
+      size: Math.random() * 8 + 2,
+      life: 100
+    });
+  }
+  animateConfetti();
+}
+
+function animateConfetti() {
+  if(particles.length === 0) return;
   
-  for(let i = 0; i < 40; i++){
-    const c = document.createElement("div");
-    c.className = "confetti";
-    c.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+  ctxC.clearRect(0,0, canvasC.width, canvasC.height);
+  
+  for(let i=0; i<particles.length; i++) {
+    let p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.5; // gravity
+    p.life--;
+    
+    ctxC.fillStyle = p.color;
+    ctxC.fillRect(p.x, p.y, p.size, p.size);
+  }
+  
+  particles = particles.filter(p => p.life > 0);
+  requestAnimationFrame(animateConfetti);
+}
 
-    // Random position & movement
-    c.style.left = Math.random() * 100 + "vw";
-    c.style.top = "-10vh";
-    c.style.fontSize = (14 + Math.random() * 14) + "px";
-    c.style.animationDuration = (2 + Math.random() * 2) + "s";
-    c.style.animationDelay = Math.random() * 0.5 + "s";
-    c.style.transform = `rotate(${Math.random() * 360}deg)`;
+/* --- BACKGROUND STARS (Canvas) --- */
+const canvasBg = document.getElementById('canvas-bg');
+const ctxBg = canvasBg.getContext('2d');
 
-    document.body.appendChild(c);
+let stars = [];
+function resizeBg() {
+  canvasBg.width = window.innerWidth;
+  canvasBg.height = window.innerHeight;
+  initStars();
+}
 
-    setTimeout(() => c.remove(), 4000);
+function initStars() {
+  stars = [];
+  for(let i=0; i<100; i++) {
+    stars.push({
+      x: Math.random() * canvasBg.width,
+      y: Math.random() * canvasBg.height,
+      r: Math.random() * 2,
+      d: Math.random() * 0.5 + 0.1
+    });
   }
 }
 
-function restart(){
-  const music = document.getElementById("bgMusic");
-  music.pause();
-  music.currentTime = 0;
+function animateBg() {
+  ctxBg.clearRect(0, 0, canvasBg.width, canvasBg.height);
+  ctxBg.fillStyle = 'white';
+  
+  stars.forEach(s => {
+    ctxBg.beginPath();
+    ctxBg.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    ctxBg.fill();
+    s.y -= s.d; // Move up
+    if(s.y < 0) s.y = canvasBg.height;
+  });
+  
+  requestAnimationFrame(animateBg);
+}
 
-  finalScreen.classList.add("hidden");
-  photos.classList.add("hidden");
-  message.classList.add("hidden");
-  cakeScreen.classList.add("hidden");
-  greet.classList.add("hidden");
+window.addEventListener('resize', resizeBg);
+resizeBg();
+animateBg();
 
-  flame.style.display = "none";
+// Force initial screen state
+goTo('screen-welcome');
 
-  i = 0;
-  c = 3;
-  document.getElementById("count").innerText = "3";
+function startCountdown() {
+  let count = 3;
+  const el = document.getElementById("count-num");
 
-  welcome.classList.remove("hidden");
+  goTo('screen-countdown');
+
+  const timer = setInterval(() => {
+    el.textContent = count;
+    count--;
+
+    if (count < 0) {
+      clearInterval(timer);
+      goTo('screen-gift');
+    }
+  }, 1000);
 }
 
 </script>
-
 </body>
 </html>
